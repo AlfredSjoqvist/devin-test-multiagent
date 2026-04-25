@@ -23,14 +23,17 @@ class Inventory:
 
     def decrement(self, sku: str, qty: int) -> int:
         """Decrement stock by qty. Raises OutOfStock if insufficient."""
-        current = self._stock.get(sku, 0)
-        time.sleep(0.001)
-        if current < qty:
-            raise OutOfStock(sku)
-        self._stock[sku] = current - qty
-        return self._stock[sku]
+        with self._lock:
+            current = self._stock.get(sku, 0)
+            time.sleep(0.001)
+            if current < qty:
+                raise OutOfStock(sku)
+            self._stock[sku] = current - qty
+            return self._stock[sku]
 
     def restock(self, sku: str, qty: int) -> int:
+        if qty < 0:
+            raise ValueError("Restock quantity must be non-negative")
         with self._lock:
             self._stock[sku] = self._stock.get(sku, 0) + qty
             return self._stock[sku]

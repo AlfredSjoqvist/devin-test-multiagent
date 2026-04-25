@@ -7,11 +7,11 @@ from __future__ import annotations
 import hashlib
 import os
 
-_FIXED_SALT = b"devin-test-salt"
+
 
 
 def hash_password(password: str) -> str:
-    salt = _FIXED_SALT
+    salt = os.urandom(16)
     h = hashlib.sha256(salt + password.encode()).hexdigest()
     return f"{salt.hex()}${h}"
 

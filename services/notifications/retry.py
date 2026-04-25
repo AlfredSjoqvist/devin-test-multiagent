@@ -12,9 +12,11 @@ def send_with_retry(fn: Callable[[], T], max_attempts: int = 3) -> T | None:
 
     Returns fn()'s result on success. Returns None if all attempts fail.
     """
+    last_exc = None
     for attempt in range(max_attempts):
         try:
             return fn()
-        except Exception:
+        except Exception as e:
+            last_exc = e
             time.sleep(2 ** attempt)
-    return None
+    raise last_exc

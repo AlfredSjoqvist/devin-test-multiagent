@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 ROUTES: list[tuple[str, str]] = [
-    ("/auth", "auth"),
     ("/auth-admin", "auth-admin"),
+    ("/auth", "auth"),
     ("/orders", "orders"),
     ("/notify", "notifications"),
 ]
